@@ -3,45 +3,52 @@ import { google } from "googleapis";
 import path from "path";
 import ejs from "ejs";
 import jwt from "jsonwebtoken";
-import { environment } from "../config/envConfig";
 
-const G_ID: string = environment.G_ID;
-const G_SECRET: string = environment.G_SECRET;
-const G_REFRESH: string = environment.G_REFRESH;
-const G_URL: string = environment.G_URL;
 
-const oAuth = new google.auth.OAuth2(G_ID, G_SECRET, G_URL);
-oAuth.setCredentials({ access_token: G_REFRESH });
+const GOOGLE_ID =
+  "848542784186-9os7noa7qvcg3nckfu38s3bhob8u6oga.apps.googleusercontent.com";
+const GOOGLE_SECRET = "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";
+const GOOGLE_REFRESH_TOKEN =
+  "1//04GgN8ydoI_ZdCgYIARAAGAQSNwF-L9IrKCOkFE95PncupZNTb3WCiygNcFb1vp20oW-1SMJTKzSWxnWw2B6nf4S85GXSTpgR44M";
+const GOOGLE_URL = "https://developers.google.com/oauthplayground";
+
+const oAuth = new google.auth.OAuth2(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_URL);
+oAuth.setCredentials({ access_token: GOOGLE_REFRESH_TOKEN});
+
+const url:string = "http://localhost:5566";
 
 export const sendInitialMail = async (user: any) => {
   try {
     const accessToken: any = (await oAuth.getAccessToken()).token;
+
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         type: "OAuth2",
-        user: "cfoonyemmemme@gmail.com",
-        clientId: G_ID,
-        clientSecret: G_SECRET,
-        refreshToken: G_REFRESH,
+        user: "codelabbest@gmail.com",
+        clientId: GOOGLE_ID,
+        clientSecret: GOOGLE_SECRET,
+        refreshToken: GOOGLE_REFRESH_TOKEN,
         accessToken,
       },
     });
 
-    const token = jwt.sign({ id: user?._id }, environment.TOKEN_SECRET);
+    const token = jwt.sign({ id: user?._id }, "josephine");
 
     const passedData = {
       userName: user?.userName,
       email: user?.email,
       otp: user?.otp,
-      url: `https://giftacb-pro.web.app/register/${token}/first-process`,
+      // url: `https://giftacb-pro.web.app/register/${token}/first-process`,
+      url: `${url}/${token}/first-process`,
     };
 
     const findFile = path.join(__dirname, "../views/firstMail.ejs");
     const readFile = await ejs.renderFile(findFile, passedData);
 
     const mailer = {
-      from: "GiftACB <cfoonyemmemme@gmail.com>",
+      from: "GiftACB <codelabbest@gmail.com>",
       to: user?.email,
       subject: `OTP Grant`,
       html: readFile,
@@ -60,28 +67,28 @@ export const sendLastMail = async (user: any) => {
       service: "gmail",
       auth: {
         type: "OAuth2",
-        user: "cfoonyemmemme@gmail.com",
-        clientId: G_ID,
-        clientSecret: G_SECRET,
-        refreshToken: G_REFRESH,
+        user: "codelabbest@gmail.com",
+        clientId: GOOGLE_ID,
+        clientSecret: GOOGLE_SECRET,
+        refreshToken: GOOGLE_REFRESH_TOKEN,
         accessToken,
       },
     });
 
-    const token = jwt.sign({ id: user?._id }, environment.TOKEN_SECRET);
+    const token = jwt.sign({ id: user?._id },"josephine");
 
     const passedData = {
       userName: user?.userName,
       email: user?.email,
       otp: user?.otp,
-      url: `https://giftacb-pro.web.app/register/${token}/verified`,
+      url: `${url}/${token}/first-process`,
     };
 
     const findFile = path.join(__dirname, "../views/LastMail.ejs");
     const readFile = await ejs.renderFile(findFile, passedData);
 
     const mailer = {
-      from: "GiftACB <cfoonyemmemme@gmail.com>",
+      from: "GiftACB <codelabbest@gmail.com>",
       to: user?.email,
       subject: `Verification Grant`,
       html: readFile,

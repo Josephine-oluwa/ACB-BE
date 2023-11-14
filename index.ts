@@ -1,10 +1,14 @@
 import express, {Application} from "express"
+import { dataBase } from "./config/Db";
+import { mainApp } from "./mainApp";
 
 const app: Application = express()
 const port: number = 5566
+mainApp(app)
 
 const server = app.listen(port, () => {
-    // dbConfig();
+  console.log("server is connected")
+    dataBase();
   });
   
 

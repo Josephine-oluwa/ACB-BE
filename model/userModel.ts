@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 interface iUser {
-  userName: string;
+  name: string;
   email: string;
   password: string;
   token: string;
@@ -16,9 +16,9 @@ interface iUserData extends iUser, mongoose.Document {}
 
 const userModel = new mongoose.Schema<iUserData>(
   {
-    userName: {
+    name: {
       type: String,
-      required: [true, "UserName Credentials is a must"],
+      required: true
     },
     email: {
       type: String,
