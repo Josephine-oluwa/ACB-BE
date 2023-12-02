@@ -4,7 +4,7 @@ import user from "./router/userRouter"
 import gift from "./router/giftRouter"
 import helmet from "helmet"
 import morgan from "morgan"
-import { AnyObject } from "mongoose"
+
 
 
 export const mainApp = (app: Application) => {

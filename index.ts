@@ -7,14 +7,15 @@ const port: number = 5566
 mainApp(app)
 
 const server = app.listen(port, () => {
+  dataBase();
   console.log("server is connected")
-    dataBase();
+   
   });
   
 
 process.on("uncaughtException", (error: Error) => {
     console.log(`uncaughtException: `, error);
-    process.exit(1);
+   
   });
   
   process.on("unhandledRejection", (reason: any) => {

@@ -6,9 +6,9 @@ import userModel from "../model/userModel";
 import { sendInitialMail, sendLastMail } from "../utils/email";
 
 
-export const registerUser = async (req: any, res: Response) => {
+export const registerUser = async (req: any, res: Response): Promise<Response> => {
 try {
-    const {name, email, password} = req.body
+    const {userName, email, password} = req.body
 
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
@@ -20,7 +20,7 @@ try {
      
 
     const user = await userModel.create({
-        name, email, password: hashed, token,  otp, wallet: 200
+        userName, email, password: hashed, token,  otp, wallet: 200
     })
 
     sendInitialMail(user).then(() => {
